@@ -22,19 +22,26 @@ time.pace.plt <- function(x, y, countries, c){ # Plot Convergence
     
     abline(h = 0) # Add vertical lines: when t (time period) < 15
     
-    if (t < 15){ abline(v = seq(20, from = 0, by = 1), lty = 3, col = "grey") }
+    m <- round(t) / 10 ^ nchar(round(t))
     
-    else if (t > 15 && t < 50){ # when t (time period) > 15 & < 45
+    GDP <- round(max(l[,1])) / 10 ^ nchar(round(max(l[,1])))
+    
+    i <- c(0, 1, 2, 5) # Calculate intervals for lines and axes
+    
+    for (n in 1:length(i) - 1){ if (m > i[n] && m < i[n + 1]){
       
-      abline(v = seq(100, from = 0, by = 10), lty=3, col="grey") }
-    
-    else if (t > 50 && t < 100){ # when t (time period) > 50 & < 100
+        mn <- i[n + 1] * 10 ^ (nchar(m) - 3) } else { next }
       
-      abline(v = seq(100, from = 0, by = 20), lty=3, col="grey") }
+      if (GDP > i[n] && GDP < i[n + 1]){ # Define intervals for GDP and years
+        
+        mx <- i[n + 1] / 2 * 10 ^ (nchar(GDP) - 3) } else { next } }
     
-    par(mar = c(8, 4.1, 4.1, 2.1)) # Define borders of the plot
+    abline(v = seq(from = 0, to = t, by = mn), col = "grey", lty = 3) 
+    abline(h = seq(from = mx, to = max(l), by = mx), col = "grey", lty = 3) 
     
-    legend(x = "bottom", inset = c(0, -0.3), legend = colnames(l), horiz = T,
+    par(mar = c(8, 4.1, 5.4, 2.1)) # Define borders of the plot
+    
+    legend(x = "bottom", inset = c(0, -0.6), legend = colnames(l), horiz = T,
            col = c, lwd = 2, cex = .85, bty = "n", xpd = T)
     
     on.exit(par(par(no.readonly = T))) } # Show legend with names
